@@ -1,3 +1,4 @@
+import 'package:firebase_cloud_messaging/notification_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,7 +19,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('A bg message just showed up :  ${message.messageId}');
+  if (message.notification != null) {
+    print("A new background notification has arrived");
+  }
 }
 
 Future<void> main() async {
@@ -55,7 +58,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      initialRoute: MyHomePage.myHomePage,
+      routes: {
+        MyHomePage.myHomePage: (context) => MyHomePage(),
+        NotificationPage.notificationPage: (context) => NotificationPage()
+      },
     );
   }
 }

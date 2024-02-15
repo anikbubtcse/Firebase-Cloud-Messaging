@@ -1,3 +1,4 @@
+import 'package:firebase_cloud_messaging/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,6 +7,8 @@ import 'main.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  static const String myHomePage = "myHomePage";
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -42,23 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
     // When the app is in background or terminated state, and user click on the notification
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+      print('Background notification is tapped');
+      final notification = message.notification;
+      final android = message.notification?.android;
       if (notification != null && android != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text(notification.title!),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(notification.body!)],
-                  ),
-                ),
-              );
-            });
+        Navigator.of(context).pushNamed(NotificationPage.notificationPage,
+            arguments: [notification.title, notification.body]);
       }
     });
   }
