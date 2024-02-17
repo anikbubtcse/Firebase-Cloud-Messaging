@@ -1,7 +1,9 @@
 import 'package:firebase_cloud_messaging/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'main.dart';
 
@@ -17,6 +19,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
+    initializeNotifications();
+
     super.initState();
 
     // When app is in foreground and a notification arrives
@@ -80,5 +84,37 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void initializeNotifications() async {
+    var status = await Permission.notification.status;
+    if (status.isDenied) {
+      showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Warning'),
+              content: const Text(
+                  'Your notification permission is restricted. Kindly enable your notification permission.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () async {
+                    await openAppSettings();
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      print("Notifications are enabled");
+    }
   }
 }
