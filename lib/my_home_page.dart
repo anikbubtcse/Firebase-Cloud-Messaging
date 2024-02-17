@@ -46,6 +46,33 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('Foreground notification received');
+    //   final notification = message.notification;
+    //   final android = message.notification?.android;
+    //   if (notification != null && android != null) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (BuildContext context) {
+    //         return AlertDialog(
+    //           title: Text(notification.title!),
+    //           content: Text(notification.body!),
+    //           actions: [
+    //             TextButton(
+    //               child: Text('OK'),
+    //               onPressed: () {
+    //                 Navigator.of(context).pushNamed(
+    //                     NotificationPage.notificationPage,
+    //                     arguments: [notification.title, notification.body]);
+    //               },
+    //             ),
+    //           ],
+    //         );
+    //       },
+    //     );
+    //   }
+    // });
+
     // When the app is in background or terminated state, and user click on the notification
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
